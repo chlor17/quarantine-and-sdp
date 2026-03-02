@@ -1,0 +1,5 @@
+[project]
+name = "databricks-claude-test-project"
+version = "0.1.0"
+description = "Test project for Databricks MCP tools with Claude Code"
+requires-python = ">=3.9"

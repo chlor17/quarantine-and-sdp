@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "databricks": {
+      "command": "/Users/chad.lortie/Documents/Github/ai-dev-kit/.venv/bin/python",
+      "args": ["/Users/chad.lortie/Documents/Github/ai-dev-kit/databricks-mcp-server/run_server.py"]
+    }
+  }
+}

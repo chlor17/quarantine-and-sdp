@@ -1,0 +1,10 @@
+# AI Dev Kit project configuration
+# This file is intended to be committed to git and shared across the team.
+
+default_workspace_path: /Workspace/Users/chad.lortie@databricks.com/
+default_catalog: chlor
+
+# project: demo-marketing
+# tags:
+#   team: marketing
+#   env: dev

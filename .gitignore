@@ -1,24 +1,20 @@
-# Test artifacts - don't commit test outputs
-*.pyc
+# Python
 __pycache__/
-.pytest_cache/
+*.py[cod]
+*$py.class
+*.so
+.Python
+env/
+venv/
+.venv
 
-# Claude Code session data
-.claude-session/
-
-# Generated test files
-test_output/
-output/
-*.parquet
-*.csv
-
-# Environment
-.env
-.env.local
+# Databricks
+.databricks/
+.databricks-resources.json
 
 # IDE
-.idea/
 .vscode/
+.idea/
 *.swp
 *.swo
 
@@ -26,12 +22,16 @@ output/
 .DS_Store
 Thumbs.db
 
-# Temporary files
-tmp/
-temp/
-*.tmp
-*.log
+# Generated/Build
+.ai-dev-kit/
+build/
+dist/
+*.egg-info/
 
-# Keep skills but ignore any local modifications
-# .claude/skills/ is committed as part of setup
-.mcp.json
+# Test artifacts
+.pytest_cache/
+.coverage
+htmlcov/
+
+# Logs
+*.log

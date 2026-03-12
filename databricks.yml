@@ -1,0 +1,82 @@
+bundle:
+  name: demo-marketing-pipeline
+
+include:
+  - resources/*.yml
+
+variables:
+  catalog:
+    description: "Unity Catalog name"
+    default: chlor
+
+  schema:
+    description: "Schema name for pipeline tables"
+    default: dp_ingestion_one_flow
+
+  volume_full:
+    description: "Volume name for full load data"
+    default: parquet_full
+
+  volume_partial:
+    description: "Volume name for partial/incremental load data"
+    default: parquet_partial
+
+  bronze_table:
+    description: "Bronze table name"
+    default: bronze_table
+
+  quarantine_table:
+    description: "Quarantine table name"
+    default: quarantine_table
+
+  dead_letter_table:
+    description: "Dead letter table name"
+    default: dead_letter_table
+
+  silver_table:
+    description: "Silver table name"
+    default: silver_table
+
+targets:
+  # Pharos demo environment
+  pharos:
+    default: true
+    mode: development
+    workspace:
+      profile: DEFAULT
+      root_path: /Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos
+    variables:
+      catalog: chlor
+      schema: Pharos
+
+  # Development environment
+  dev:
+    mode: development
+    workspace:
+      profile: DEFAULT
+    variables:
+      catalog: chlor
+      schema: dp_ingestion_one_flow_dev
+
+  # Production environment
+  prod:
+    mode: production
+    workspace:
+      profile: DEFAULT
+    variables:
+      catalog: chlor
+      schema: dp_ingestion_one_flow
+
+# Sync configuration for deployment
+sync:
+  include:
+    - "src/**/*.py"
+    - "config.yaml"
+    - "requirements.txt"
+  exclude:
+    - ".git/**"
+    - "archive/**"
+    - "*.pyc"
+    - "__pycache__/**"
+    - ".venv/**"
+    - ".pytest_cache/**"

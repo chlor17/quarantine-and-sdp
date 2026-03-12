@@ -1,0 +1,15 @@
+Catalog: "chlor"
+Schema: "Pharos"
+
+Vol_Partial: "parquet_partial"
+Vol_Full: "parquet_full"
+
+Bronze_table: "bronze_table"
+Quarantine_table: "quarantine_table"
+Dead_letter_table: "dead_letter_table"
+Silver_table: "silver_table"
+
+# Quality Control Settings
+Quarantine_Hours: 24  # Time to fix issues before expiry (in hours)
+Required_Columns: ["id", "name", "age"]  # Columns that cannot be null
+Nullable_Columns: []  # Columns that can be null

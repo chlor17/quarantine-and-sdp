@@ -1,0 +1,40 @@
+resources:
+  pipelines:
+    # ====================================================================================
+    # Silver Transformation Pipeline: SCD Type 2 tracking with continuous CDC
+    # ====================================================================================
+    silver_transformation:
+      name: "[${bundle.target}] Silver SCD Type 2 Pipeline"
+
+      # Unity Catalog configuration
+      catalog: ${var.catalog}
+      target: ${var.schema}
+
+      # Pipeline libraries (Python files defining tables)
+      libraries:
+        - notebook:
+            path: ../src/pipelines/silver_transformation/dlt_tables.py
+
+      # Pipeline execution mode
+      continuous: true
+      development: true
+
+      # Serverless compute
+      serverless: true
+
+      # Performance optimizations
+      photon: true
+
+      # Configuration passed to pipeline
+      configuration:
+        source_catalog: ${var.catalog}
+        source_schema: ${var.schema}
+        bronze_table: ${var.bronze_table}
+
+      # Notifications
+      notifications:
+        - alerts:
+            - on-update-failure
+            - on-update-fatal-failure
+          email_recipients:
+            - user@example.com  # TODO: Update with actual email

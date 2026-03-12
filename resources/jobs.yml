@@ -1,0 +1,105 @@
+resources:
+  jobs:
+    # ====================================================================================
+    # Full Load Pipeline: Daily full snapshot with inline quality routing
+    # ====================================================================================
+    full_load_pipeline:
+      name: "[${bundle.target}] Full Load (Quality → Bronze + Quarantine)"
+      description: "Full load with upfront quality validation routing to Bronze and Quarantine in parallel"
+
+      environments:
+        - environment_key: "default"
+          spec:
+            environment_version: "2"
+            dependencies:
+              - pyyaml
+
+      tasks:
+        # Single task: Validates, then writes clean → Bronze, invalid → Quarantine
+        - task_key: full_load_with_quality
+          environment_key: "default"
+          notebook_task:
+            notebook_path: ../src/notebooks/full_load.py
+            source: WORKSPACE
+          timeout_seconds: 3600
+
+      # Schedule: Daily at 1 AM
+      schedule:
+        quartz_cron_expression: "0 0 1 * * ?"
+        timezone_id: "America/Los_Angeles"
+        pause_status: "UNPAUSED"
+
+      max_concurrent_runs: 1
+
+      email_notifications:
+        on_failure:
+          - user@example.com  # TODO: Update with actual email
+
+    # ====================================================================================
+    # Partial Load Pipeline: Incremental updates with inline quality routing
+    # ====================================================================================
+    partial_load_pipeline:
+      name: "[${bundle.target}] Partial Load (Quality → Bronze + Quarantine)"
+      description: "Incremental load with upfront quality validation and ID stacking pattern"
+
+      environments:
+        - environment_key: "default"
+          spec:
+            environment_version: "2"
+            dependencies:
+              - pyyaml
+
+      tasks:
+        # Single task: Validates, then merges clean → Bronze, invalid → Quarantine
+        - task_key: partial_load_with_quality
+          environment_key: "default"
+          notebook_task:
+            notebook_path: ../src/notebooks/partial_load.py
+            source: WORKSPACE
+          timeout_seconds: 3600
+
+      # Schedule: Every 6 hours
+      schedule:
+        quartz_cron_expression: "0 0 */6 * * ?"
+        timezone_id: "America/Los_Angeles"
+        pause_status: "UNPAUSED"
+
+      max_concurrent_runs: 1
+
+      email_notifications:
+        on_failure:
+          - user@example.com  # TODO: Update with actual email
+
+    # ====================================================================================
+    # Quarantine Maintenance: Background job for expired record processing
+    # ====================================================================================
+    quarantine_maintenance:
+      name: "[${bundle.target}] Quarantine Processor"
+      description: "Background maintenance for quarantine table: process expired records, detect fixes, health monitoring"
+
+      environments:
+        - environment_key: "default"
+          spec:
+            environment_version: "2"
+            dependencies:
+              - pyyaml
+
+      tasks:
+        - task_key: quarantine_processor
+          environment_key: "default"
+          notebook_task:
+            notebook_path: ../src/notebooks/quarantine_processor.py
+            source: WORKSPACE
+          timeout_seconds: 1800
+
+      # Schedule: Hourly
+      schedule:
+        quartz_cron_expression: "0 0 * * * ?"
+        timezone_id: "America/Los_Angeles"
+        pause_status: "UNPAUSED"
+
+      max_concurrent_runs: 1
+
+      email_notifications:
+        on_failure:
+          - user@example.com  # TODO: Update with actual email

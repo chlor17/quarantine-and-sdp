@@ -12,9 +12,17 @@ venv/
 .databricks/
 .databricks-resources.json
 
-# IDE
+# Local configuration overrides (not committed to repo)
+config.local.yaml
+databricks.local.yml
+*.local.yaml
+*.local.yml
+
+# IDE and AI Tools
 .vscode/
 .idea/
+.claude/
+.cursor/
 *.swp
 *.swo
 

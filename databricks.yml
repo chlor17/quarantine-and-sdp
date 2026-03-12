@@ -1,5 +1,5 @@
 bundle:
-  name: demo-marketing-pipeline
+  name: quarantine-and-sdp-pipeline
 
 include:
   - resources/*.yml
@@ -7,11 +7,11 @@ include:
 variables:
   catalog:
     description: "Unity Catalog name"
-    default: chlor
+    default: your_catalog
 
   schema:
     description: "Schema name for pipeline tables"
-    default: dp_ingestion_one_flow
+    default: your_schema
 
   volume_full:
     description: "Volume name for full load data"
@@ -38,16 +38,16 @@ variables:
     default: silver_table
 
 targets:
-  # Pharos demo environment
-  pharos:
+  # Demo environment
+  demo:
     default: true
     mode: development
     workspace:
       profile: DEFAULT
-      root_path: /Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos
+      root_path: /Workspace/Users/${workspace.current_user.userName}/quarantine-sdp-demo
     variables:
-      catalog: chlor
-      schema: Pharos
+      catalog: your_catalog
+      schema: your_schema
 
   # Development environment
   dev:
@@ -55,8 +55,8 @@ targets:
     workspace:
       profile: DEFAULT
     variables:
-      catalog: chlor
-      schema: dp_ingestion_one_flow_dev
+      catalog: your_catalog
+      schema: your_schema_dev
 
   # Production environment
   prod:
@@ -64,8 +64,8 @@ targets:
     workspace:
       profile: DEFAULT
     variables:
-      catalog: chlor
-      schema: dp_ingestion_one_flow
+      catalog: your_catalog
+      schema: your_schema
 
 # Sync configuration for deployment
 sync:

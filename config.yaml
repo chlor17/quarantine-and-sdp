@@ -1,5 +1,5 @@
-Catalog: "chlor"
-Schema: "Pharos"
+Catalog: "your_catalog"
+Schema: "your_schema"
 
 Vol_Partial: "parquet_partial"
 Vol_Full: "parquet_full"

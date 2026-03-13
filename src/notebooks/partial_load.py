@@ -11,16 +11,17 @@ Partial Load: Landing Zone → Quality Check → Bronze + Quarantine (parallel)
 # COMMAND ----------
 
 import sys
-
-# Add workspace files to Python path for imports
-workspace_root = "/Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos/files"
-if workspace_root not in sys.path:
-    sys.path.insert(0, workspace_root)
-
-# Import utilities
 from pyspark.sql import functions as F
 from delta.tables import DeltaTable
+
+# Load config first to get workspace_root
 from src.utils.config import load_config
+config = load_config()
+
+# Add workspace files to Python path for imports (if configured)
+workspace_root = config.get('Workspace_Root')
+if workspace_root and workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
 from src.utils.file_discovery import get_latest_parquet_path
 from src.utils.schema_definitions import create_bronze_table, create_quarantine_table
 from src.utils.constants import (

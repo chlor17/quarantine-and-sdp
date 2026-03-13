@@ -17,16 +17,11 @@ def load_config(config_path: str = "config.yaml") -> dict:
     # Try to find config.yaml
     config_file = Path(config_path)
     if not config_file.exists():
-        # Try workspace bundle location first
-        workspace_config = Path("/Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos/files/config.yaml")
-        if workspace_config.exists():
-            config_file = workspace_config
-        else:
-            # Search up to 3 parent directories
-            for parent in [Path.cwd()] + list(Path.cwd().parents[:3]):
-                config_file = parent / "config.yaml"
-                if config_file.exists():
-                    break
+        # Search up to 3 parent directories
+        for parent in [Path.cwd()] + list(Path.cwd().parents[:3]):
+            config_file = parent / "config.yaml"
+            if config_file.exists():
+                break
 
     with open(config_file, 'r') as file:
         config = yaml.safe_load(file)

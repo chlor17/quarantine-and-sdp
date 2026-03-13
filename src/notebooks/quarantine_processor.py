@@ -11,15 +11,16 @@ Background maintenance for quarantine table (runs hourly)
 
 import sys
 import os
-
-# Add workspace files to Python path for imports
-workspace_root = "/Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos/files"
-if workspace_root not in sys.path:
-    sys.path.insert(0, workspace_root)
-
-# Import utilities
 from pyspark.sql import functions as F
+
+# Load config first to get workspace_root
 from src.utils.config import load_config
+config = load_config()
+
+# Add workspace files to Python path for imports (if configured)
+workspace_root = config.get('Workspace_Root')
+if workspace_root and workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
 from src.utils.quarantine_ops import (
     detect_and_release_fixed_records,
     move_expired_to_dead_letter,

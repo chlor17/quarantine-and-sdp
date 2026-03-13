@@ -10,17 +10,16 @@ Quality Check: Validates Landing Zone data and routes to Bronze or Quarantine
 
 import os
 import sys
-
-# Add workspace files to Python path for imports
-workspace_root = "/Workspace/Users/chad.lortie@databricks.com/2026-03-06 Pharos/files"
-
-if workspace_root not in sys.path:
-    sys.path.insert(0, workspace_root)
-
-# Import utilities
 from pyspark.sql import functions as F
 
+# Load config first to get workspace_root
 from src.utils.config import load_config
+config = load_config()
+
+# Add workspace files to Python path for imports (if configured)
+workspace_root = config.get('Workspace_Root')
+if workspace_root and workspace_root not in sys.path:
+    sys.path.insert(0, workspace_root)
 from src.utils.file_discovery import get_latest_from_multiple_volumes
 from src.utils.quality_validation import quality_check_and_route
 from src.utils.quarantine_ops import (

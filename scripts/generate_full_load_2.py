@@ -6,8 +6,8 @@ from pyspark.sql.types import StructType, StructField, LongType, StringType
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-CATALOG = "chlor"
-SCHEMA = "Pharos"
+CATALOG = "your_catalog"
+SCHEMA = "your_schema"
 FULL_LOAD_2 = f"/Volumes/{CATALOG}/{SCHEMA}/parquet_full/20991231_030000"
 
 # =============================================================================

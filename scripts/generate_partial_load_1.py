@@ -6,8 +6,8 @@ from pyspark.sql.types import StructType, StructField, LongType, StringType
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-CATALOG = "chlor"
-SCHEMA = "Pharos"
+CATALOG = "your_catalog"
+SCHEMA = "your_schema"
 PARTIAL_LOAD_1 = f"/Volumes/{CATALOG}/{SCHEMA}/parquet_partial/20991231_020000"
 
 # =============================================================================

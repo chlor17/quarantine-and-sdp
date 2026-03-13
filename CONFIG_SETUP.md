@@ -54,7 +54,8 @@ Nullable_Columns: []
 | `schema` | databricks.yml | Schema for pipeline tables | `data_pipeline` |
 | `Catalog` | config.yaml | Unity Catalog name | `my_catalog` |
 | `Schema` | config.yaml | Target schema | `data_pipeline` |
-| `root_path` | databricks.yml (targets) | Workspace path | `/Workspace/Users/me@company.com/pipeline` |
+| `Workspace_Root` | config.yaml | Workspace files path for imports | `/Workspace/Users/me@company.com/pipeline/files` |
+| `root_path` | databricks.yml (targets) | Workspace bundle path | `/Workspace/Users/me@company.com/pipeline` |
 
 ### Optional Values
 

@@ -289,7 +289,7 @@ def promote_blocked_records(
 
     Example:
         >>> promoted_count = promote_blocked_records(
-        ...     spark, "chlor", "Pharos",
+        ...     spark, "your_catalog", "your_schema",
         ...     "quarantine_table", "bronze_table",
         ...     ["id", "name", "age"]
         ... )

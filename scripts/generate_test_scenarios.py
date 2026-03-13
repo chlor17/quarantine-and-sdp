@@ -6,8 +6,8 @@ from pyspark.sql.types import StructType, StructField, IntegerType, StringType
 # =============================================================================
 # CONFIGURATION
 # =============================================================================
-CATALOG = "chlor"
-SCHEMA = "Pharos"
+CATALOG = "your_catalog"
+SCHEMA = "your_schema"
 
 # Volume paths for each dataset
 # Use timestamps that will be latest: 210000, 220000, 230000, 240000 (9pm, 10pm, 11pm, midnight)

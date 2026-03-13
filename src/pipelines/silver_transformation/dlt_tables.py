@@ -13,8 +13,8 @@ from pyspark import pipelines as dp
 from pyspark.sql.functions import col, expr
 
 # Get config from DAB environment variables
-catalog = os.getenv("source_catalog", "chlor")
-schema = os.getenv("source_schema", "Pharos")
+catalog = os.getenv("source_catalog", "your_catalog")
+schema = os.getenv("source_schema", "your_schema")
 bronze_table = os.getenv("bronze_table", "bronze_table")
 
 # COMMAND ----------

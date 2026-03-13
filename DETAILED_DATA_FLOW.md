@@ -15,7 +15,7 @@ We'll trace 8 records through the system:
 
 ## STEP 1: Full Load - Landing Zone
 
-**File Created:** `/Volumes/chlor/dp_ingestion_one_flow/parquet_full/20260306_143022/`
+**File Created:** `/Volumes/your_catalog/your_schema/parquet_full/20260306_143022/`
 
 ### Data in Landing Zone
 ```
@@ -124,7 +124,7 @@ Execute: `DELETE FROM bronze_table`
 
 ## STEP 4: Partial Load - Landing Zone
 
-**File Created:** `/Volumes/chlor/dp_ingestion_one_flow/parquet_partial/20260306_150000/`
+**File Created:** `/Volumes/your_catalog/your_schema/parquet_partial/20260306_150000/`
 
 ### Data in Landing Zone (Partial)
 ```

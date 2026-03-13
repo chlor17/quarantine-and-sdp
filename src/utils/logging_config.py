@@ -1,5 +1,5 @@
 """
-Logging configuration for demo_marketing pipeline.
+Logging configuration for quarantine-sdp pipeline.
 
 Provides structured logging with timestamps and context tracking.
 Replaces print() statements with proper logging levels.
@@ -60,7 +60,7 @@ def setup_logger(
     Example:
         >>> from src.utils.logging_config import setup_logger
         >>> logger = setup_logger(__name__)
-        >>> logger.info("Starting full load process", extra={"catalog": "chlor"})
+        >>> logger.info("Starting full load process", extra={"catalog": "your_catalog"})
         >>> logger.warning("Found quality issues", extra={"count": 5})
         >>> logger.error("Failed to process", exc_info=True)
     """

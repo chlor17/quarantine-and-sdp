@@ -21,9 +21,9 @@ def get_latest_parquet_path(catalog: str, schema: str, volume_name: str) -> str:
         ValueError: If no parquet folders found in volume
 
     Example:
-        >>> latest_path = get_latest_parquet_path("chlor", "dp_ingestion_one_flow", "parquet_full")
+        >>> latest_path = get_latest_parquet_path("your_catalog", "your_schema", "parquet_full")
         >>> print(latest_path)
-        /Volumes/chlor/dp_ingestion_one_flow/parquet_full/20260306_141500
+        /Volumes/your_catalog/your_schema/parquet_full/20260306_141500
     """
     parquet_dir = f"/Volumes/{catalog}/{schema}/{volume_name}"
 
@@ -69,7 +69,7 @@ def get_all_parquet_paths(catalog: str, schema: str, volume_name: str) -> List[s
         FileNotFoundError: If volume directory doesn't exist
 
     Example:
-        >>> all_paths = get_all_parquet_paths("chlor", "dp_ingestion_one_flow", "parquet_full")
+        >>> all_paths = get_all_parquet_paths("your_catalog", "your_schema", "parquet_full")
         >>> for path in all_paths:
         ...     print(path)
     """
@@ -109,7 +109,7 @@ def get_latest_from_multiple_volumes(
 
     Example:
         >>> results = get_latest_from_multiple_volumes(
-        ...     "chlor", "dp_ingestion_one_flow",
+        ...     "your_catalog", "your_schema",
         ...     ["parquet_full", "parquet_partial"]
         ... )
         >>> for volume, folder, path in results:

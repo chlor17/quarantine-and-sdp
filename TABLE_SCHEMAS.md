@@ -153,7 +153,7 @@ SELECT
   age,
   quarantine_reason,
   ROUND((unix_timestamp(quarantine_expiry) - unix_timestamp(current_timestamp())) / 3600, 2) as hours_remaining
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
 ORDER BY quarantine_expiry ASC
 ```
@@ -249,7 +249,7 @@ COMMENT 'Silver layer with SCD Type 2 tracking for full loads'
 **Querying Current State**:
 ```sql
 SELECT id, name, age
-FROM chlor.dp_ingestion_one_flow.silver_table
+FROM your_catalog.your_schema.silver_table
 WHERE __CURRENT = true
 ```
 
@@ -263,7 +263,7 @@ SELECT
   __END_AT,
   __CURRENT,
   DATEDIFF(__END_AT, __START_AT) as days_active
-FROM chlor.dp_ingestion_one_flow.silver_table
+FROM your_catalog.your_schema.silver_table
 WHERE id = 1
 ORDER BY __START_AT
 ```
@@ -271,7 +271,7 @@ ORDER BY __START_AT
 **Time Travel Query** (as of specific date):
 ```sql
 SELECT id, name, age
-FROM chlor.dp_ingestion_one_flow.silver_table
+FROM your_catalog.your_schema.silver_table
 WHERE id = 1
   AND __START_AT <= '2026-03-03 12:03:00'
   AND (__END_AT > '2026-03-03 12:03:00' OR __END_AT IS NULL)
@@ -360,7 +360,7 @@ SELECT
   quarantine_status,
   COUNT(*) as total_records,
   COUNT(DISTINCT id) as unique_ids
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 GROUP BY quarantine_status
 ORDER BY total_records DESC
 ```
@@ -371,7 +371,7 @@ SELECT
   quarantine_reason,
   COUNT(*) as count,
   COLLECT_LIST(DISTINCT id) as affected_ids
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
 GROUP BY quarantine_reason
 ORDER BY count DESC
@@ -385,7 +385,7 @@ SELECT
   age,
   quarantine_reason,
   ROUND((unix_timestamp(quarantine_expiry) - unix_timestamp(current_timestamp())) / 3600, 2) as hours_remaining
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
   AND quarantine_expiry > current_timestamp()
   AND quarantine_expiry < current_timestamp() + INTERVAL 6 HOURS
@@ -398,7 +398,7 @@ SELECT
   id,
   COUNT(*) as version_count,
   COLLECT_LIST(STRUCT(quarantine_timestamp, quarantine_status, validation_errors)) as versions
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 GROUP BY id
 HAVING COUNT(*) > 1
 ORDER BY version_count DESC
@@ -408,9 +408,9 @@ ORDER BY version_count DESC
 ```sql
 WITH metrics AS (
   SELECT
-    (SELECT COUNT(*) FROM chlor.dp_ingestion_one_flow.bronze_table) as bronze_count,
-    (SELECT COUNT(*) FROM chlor.dp_ingestion_one_flow.quarantine_table WHERE quarantine_status = 'ACTIVE') as active_quarantine,
-    (SELECT COUNT(*) FROM chlor.dp_ingestion_one_flow.dead_letter_table) as dead_letter_count
+    (SELECT COUNT(*) FROM your_catalog.your_schema.bronze_table) as bronze_count,
+    (SELECT COUNT(*) FROM your_catalog.your_schema.quarantine_table WHERE quarantine_status = 'ACTIVE') as active_quarantine,
+    (SELECT COUNT(*) FROM your_catalog.your_schema.dead_letter_table) as dead_letter_count
 )
 SELECT
   bronze_count,

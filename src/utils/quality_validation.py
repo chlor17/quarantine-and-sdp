@@ -1,4 +1,4 @@
-"""Quality validation and routing for demo_marketing pipeline."""
+"""Quality validation and routing for quarantine-sdp pipeline."""
 
 from typing import Dict, List
 

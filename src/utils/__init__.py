@@ -1,5 +1,5 @@
 """
-Utility modules for demo_marketing pipeline.
+Utility modules for quarantine-sdp pipeline.
 
 This package contains shared utilities for:
 - Configuration loading

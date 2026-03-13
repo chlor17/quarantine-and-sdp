@@ -78,7 +78,7 @@ This is an **enterprise-grade data ingestion pipeline** built on Databricks that
 ### Project Structure
 
 ```
-demo_marketing/
+quarantine-and-sdp/
 │
 ├── config.yaml                          # Central configuration
 ├── databricks.yml                       # Asset Bundle definition
@@ -115,8 +115,8 @@ demo_marketing/
 
 #### 1. Configuration (config.yaml)
 ```yaml
-Catalog: "chlor"
-Schema: "Pharos"
+Catalog: "your_catalog"
+Schema: "your_schema"
 Bronze_table: "bronze_table"
 Quarantine_table: "quarantine_table"
 Quarantine_Hours: 24
@@ -392,9 +392,9 @@ spark.readStream
 
 Every data load creates a new timestamped folder:
 ```
-/Volumes/chlor/Pharos/parquet_full/20260310_120000/
-/Volumes/chlor/Pharos/parquet_full/20260310_180000/
-/Volumes/chlor/Pharos/parquet_partial/20260310_130000/
+/Volumes/your_catalog/your_schema/parquet_full/20260310_120000/
+/Volumes/your_catalog/your_schema/parquet_full/20260310_180000/
+/Volumes/your_catalog/your_schema/parquet_partial/20260310_130000/
 ```
 
 **Benefits**:
@@ -425,9 +425,9 @@ Deploys:
 ```sql
 -- Overall data quality rate
 SELECT
-  (SELECT COUNT(*) FROM chlor.Pharos.bronze_table) as bronze_count,
-  (SELECT COUNT(*) FROM chlor.Pharos.quarantine_table WHERE quarantine_status = 'ACTIVE') as active_quarantine,
-  (SELECT COUNT(*) FROM chlor.Pharos.dead_letter_table) as dead_letter_count
+  (SELECT COUNT(*) FROM your_catalog.your_schema.bronze_table) as bronze_count,
+  (SELECT COUNT(*) FROM your_catalog.your_schema.quarantine_table WHERE quarantine_status = 'ACTIVE') as active_quarantine,
+  (SELECT COUNT(*) FROM your_catalog.your_schema.dead_letter_table) as dead_letter_count
 ```
 
 #### 2. Quarantine Alerts
@@ -436,7 +436,7 @@ SELECT
 SELECT
   id, quarantine_reason,
   ROUND((unix_timestamp(quarantine_expiry) - unix_timestamp(current_timestamp())) / 3600, 2) as hours_remaining
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
   AND quarantine_expiry < current_timestamp() + INTERVAL 6 HOURS
 ORDER BY quarantine_expiry
@@ -449,7 +449,7 @@ SELECT
   quarantine_reason,
   COUNT(*) as count,
   COUNT(DISTINCT id) as unique_ids
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
 GROUP BY quarantine_reason
 ORDER BY count DESC
@@ -560,5 +560,4 @@ ORDER BY count DESC
 ---
 
 **Document Version**: 1.0
-**Last Updated**: 2026-03-10
-**Contact**: chad.lortie@databricks.com
+**Last Updated**: Reference implementation

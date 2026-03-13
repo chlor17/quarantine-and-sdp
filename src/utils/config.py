@@ -1,4 +1,4 @@
-"""Simple configuration loading for demo_marketing pipeline."""
+"""Simple configuration loading for quarantine-sdp pipeline."""
 
 import yaml
 from pathlib import Path

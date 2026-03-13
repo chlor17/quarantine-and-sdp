@@ -19,7 +19,7 @@ Quarantined records have an expiry time (default: 24 hours). After expiry, they 
 ```sql
 -- View all active quarantine records
 SELECT id, name, age, reason, quarantine_timestamp, quarantine_expiry
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE is_released = FALSE
 ORDER BY quarantine_timestamp DESC;
 ```
@@ -29,7 +29,7 @@ ORDER BY quarantine_timestamp DESC;
 ```sql
 -- Check records for a specific ID
 SELECT *
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE id = 3
   AND is_released = FALSE;
 ```
@@ -39,7 +39,7 @@ WHERE id = 3
 ```sql
 -- Count quarantine records by reason
 SELECT reason, COUNT(*) as count
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE is_released = FALSE
 GROUP BY reason
 ORDER BY count DESC;
@@ -54,7 +54,7 @@ ORDER BY count DESC;
 1. **Identify the problematic records**:
    ```sql
    SELECT id, name, age, reason, source_file
-   FROM chlor.Pharos.quarantine_table
+   FROM your_catalog.your_schema.quarantine_table
    WHERE is_released = FALSE;
    ```
 
@@ -68,7 +68,7 @@ ORDER BY count DESC;
    ```sql
    -- Check if records moved to Bronze
    SELECT id, name, age
-   FROM chlor.Pharos.bronze_table
+   FROM your_catalog.your_schema.bronze_table
    WHERE id IN (3, 4, 8);  -- Your fixed IDs
    ```
 
@@ -82,7 +82,7 @@ ORDER BY count DESC;
 
 ```sql
 -- Update name directly in quarantine table
-UPDATE chlor.Pharos.quarantine_table
+UPDATE your_catalog.your_schema.quarantine_table
 SET name = 'Unknown'
 WHERE id = 3
   AND is_released = FALSE;
@@ -92,7 +92,7 @@ WHERE id = 3
 
 ```sql
 -- Update age directly
-UPDATE chlor.Pharos.quarantine_table
+UPDATE your_catalog.your_schema.quarantine_table
 SET age = 0  -- or appropriate default
 WHERE id = 4
   AND is_released = FALSE;
@@ -102,7 +102,7 @@ WHERE id = 4
 
 ```sql
 -- Mark as released so they can be processed
-UPDATE chlor.Pharos.quarantine_table
+UPDATE your_catalog.your_schema.quarantine_table
 SET is_released = TRUE
 WHERE id IN (3, 4)
   AND is_released = FALSE;
@@ -128,7 +128,7 @@ UNION ALL
 SELECT 8 AS id, 'Corrected Name' AS name, 28 AS age;
 
 -- Merge corrections into quarantine table
-MERGE INTO chlor.Pharos.quarantine_table AS quarantine
+MERGE INTO your_catalog.your_schema.quarantine_table AS quarantine
 USING corrected_records AS corrections
 ON quarantine.id = corrections.id
   AND quarantine.is_released = FALSE
@@ -138,7 +138,7 @@ WHEN MATCHED THEN
     quarantine.age = corrections.age;
 
 -- Mark as released
-UPDATE chlor.Pharos.quarantine_table
+UPDATE your_catalog.your_schema.quarantine_table
 SET is_released = TRUE
 WHERE id IN (SELECT id FROM corrected_records)
   AND is_released = FALSE;
@@ -154,7 +154,7 @@ WHERE id IN (SELECT id FROM corrected_records)
 from pyspark.sql import functions as F
 
 # Read quarantine table
-quarantine_df = spark.table("chlor.Pharos.quarantine_table").filter("is_released = FALSE")
+quarantine_df = spark.table("your_catalog.your_schema.quarantine_table").filter("is_released = FALSE")
 
 # Apply fixes (example: fill nulls with defaults)
 fixed_df = quarantine_df \
@@ -166,7 +166,7 @@ fixed_df = quarantine_df \
 
 from delta.tables import DeltaTable
 
-quarantine_table = DeltaTable.forName(spark, "chlor.Pharos.quarantine_table")
+quarantine_table = DeltaTable.forName(spark, "your_catalog.your_schema.quarantine_table")
 
 (quarantine_table.alias("q")
     .merge(
@@ -182,7 +182,7 @@ quarantine_table = DeltaTable.forName(spark, "chlor.Pharos.quarantine_table")
 
 # Mark as released
 spark.sql("""
-    UPDATE chlor.Pharos.quarantine_table
+    UPDATE your_catalog.your_schema.quarantine_table
     SET is_released = TRUE
     WHERE id IN (SELECT DISTINCT id FROM corrected_ids)
       AND is_released = FALSE
@@ -200,7 +200,7 @@ After fixing records, always verify:
 ```sql
 -- Should return 0 for fixed IDs
 SELECT COUNT(*)
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE id IN (3, 4, 8)
   AND is_released = FALSE;
 ```
@@ -210,7 +210,7 @@ WHERE id IN (3, 4, 8)
 ```sql
 -- Fixed records should appear here
 SELECT id, name, age
-FROM chlor.Pharos.bronze_table
+FROM your_catalog.your_schema.bronze_table
 WHERE id IN (3, 4, 8);
 ```
 
@@ -219,7 +219,7 @@ WHERE id IN (3, 4, 8);
 ```sql
 -- Should propagate to Silver via CDC
 SELECT id, name, age, is_current
-FROM chlor.Pharos.silver_table
+FROM your_catalog.your_schema.silver_table
 WHERE id IN (3, 4, 8)
   AND is_current = TRUE;
 ```
@@ -252,7 +252,7 @@ SELECT
   DATE(quarantine_timestamp) as date,
   COUNT(*) as quarantined_count,
   SUM(CASE WHEN is_released THEN 1 ELSE 0 END) as released_count
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 GROUP BY DATE(quarantine_timestamp)
 ORDER BY date DESC;
 ```
@@ -281,7 +281,7 @@ Schedule: Runs every hour (adjust in `resources/jobs.yml`)
 ```sql
 -- Check all quarantine history for an ID
 SELECT *
-FROM chlor.Pharos.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE id = 3
 ORDER BY quarantine_timestamp;
 ```
@@ -296,18 +296,18 @@ ORDER BY quarantine_timestamp;
 
 ```sql
 -- View dead letter records
-SELECT * FROM chlor.Pharos.dead_letter_table
+SELECT * FROM your_catalog.your_schema.dead_letter_table
 WHERE id = 3;
 
 -- Copy back to quarantine with new expiry
-INSERT INTO chlor.Pharos.quarantine_table
+INSERT INTO your_catalog.your_schema.quarantine_table
 SELECT
   id, name, age,
   current_timestamp() as quarantine_timestamp,
   current_timestamp() + INTERVAL 24 HOURS as quarantine_expiry,
   source_file, reason,
   FALSE as is_released
-FROM chlor.Pharos.dead_letter_table
+FROM your_catalog.your_schema.dead_letter_table
 WHERE id = 3;
 ```
 
@@ -317,5 +317,5 @@ WHERE id = 3;
 
 For questions or issues:
 - Check logs in Databricks Job runs
-- Review quarantine stats: `SELECT * FROM chlor.Pharos.quarantine_table WHERE is_released = FALSE`
+- Review quarantine stats: `SELECT * FROM your_catalog.your_schema.quarantine_table WHERE is_released = FALSE`
 - Contact your data engineering team

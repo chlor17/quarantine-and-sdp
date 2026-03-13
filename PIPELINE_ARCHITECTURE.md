@@ -310,7 +310,7 @@ update status to 'EXPIRED'
 ## Configuration (config.yaml)
 
 ```yaml
-Catalog: "chlor"
+Catalog: "your_catalog"
 Schema: "dp_ingestion_one_flow"
 
 Vol_Partial: "parquet_partial"
@@ -383,17 +383,17 @@ Job 4: Quarantine Maintenance
 ```sql
 -- Bronze record count
 SELECT COUNT(*) as bronze_count
-FROM chlor.dp_ingestion_one_flow.bronze_table;
+FROM your_catalog.your_schema.bronze_table;
 
 -- Quarantine status breakdown
 SELECT quarantine_status, COUNT(*) as count, COUNT(DISTINCT id) as unique_ids
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 GROUP BY quarantine_status;
 
 -- Active quarantine records expiring soon
 SELECT id, quarantine_reason,
        ROUND((unix_timestamp(quarantine_expiry) - unix_timestamp(current_timestamp())) / 3600, 2) as hours_remaining
-FROM chlor.dp_ingestion_one_flow.quarantine_table
+FROM your_catalog.your_schema.quarantine_table
 WHERE quarantine_status = 'ACTIVE'
   AND quarantine_expiry < current_timestamp() + INTERVAL 6 HOURS
 ORDER BY quarantine_expiry;

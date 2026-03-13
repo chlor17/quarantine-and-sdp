@@ -1,5 +1,5 @@
 """
-Constants for demo_marketing pipeline.
+Constants for quarantine-sdp pipeline.
 
 Centralizes all magic strings and constants used across the pipeline.
 """

@@ -1,5 +1,5 @@
 """
-Table schema definitions for demo_marketing pipeline.
+Table schema definitions for quarantine-sdp pipeline.
 
 Centralizes all CREATE TABLE DDL statements to eliminate duplication.
 """
@@ -29,7 +29,7 @@ def create_bronze_table(
         columns: List of column definitions (default: id INT, name STRING, age INT)
 
     Example:
-        >>> create_bronze_table(spark, "chlor", "dp_ingestion_one_flow", "bronze_table")
+        >>> create_bronze_table(spark, "your_catalog", "your_schema", "bronze_table")
     """
     if columns is None:
         columns = ["id INT", "name STRING", "age INT"]
@@ -71,7 +71,7 @@ def create_quarantine_table(
         data_columns: List of data column definitions (default: id INT, name STRING, age INT)
 
     Example:
-        >>> create_quarantine_table(spark, "chlor", "dp_ingestion_one_flow", "quarantine_table")
+        >>> create_quarantine_table(spark, "your_catalog", "your_schema", "quarantine_table")
     """
     if data_columns is None:
         data_columns = ["id INT", "name STRING", "age INT"]
@@ -120,7 +120,7 @@ def create_dead_letter_table(
         data_columns: List of data column definitions
 
     Example:
-        >>> create_dead_letter_table(spark, "chlor", "dp_ingestion_one_flow", "dead_letter_table")
+        >>> create_dead_letter_table(spark, "your_catalog", "your_schema", "dead_letter_table")
     """
     if data_columns is None:
         data_columns = ["id INT", "name STRING", "age INT"]
@@ -170,7 +170,7 @@ def create_silver_table(
         data_columns: List of data column definitions
 
     Example:
-        >>> create_silver_table(spark, "chlor", "dp_ingestion_one_flow", "silver_table")
+        >>> create_silver_table(spark, "your_catalog", "your_schema", "silver_table")
     """
     if data_columns is None:
         data_columns = ["id INT", "name STRING", "age INT"]

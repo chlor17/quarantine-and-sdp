@@ -1,5 +1,5 @@
 """
-Quarantine operations for demo_marketing pipeline.
+Quarantine operations for quarantine-sdp pipeline.
 
 Consolidates logic for:
 - Getting active quarantined IDs
@@ -48,7 +48,7 @@ def get_active_quarantined_ids(
         List[int]: List of quarantined IDs
 
     Example:
-        >>> quarantined_ids = get_active_quarantined_ids(spark, "chlor", "dp_ingestion_one_flow", "quarantine_table")
+        >>> quarantined_ids = get_active_quarantined_ids(spark, "your_catalog", "your_schema", "quarantine_table")
         >>> print(f"Found {len(quarantined_ids)} quarantined IDs")
     """
     full_table_name = f"{catalog}.{schema}.{quarantine_table}"
@@ -102,7 +102,7 @@ def detect_and_release_fixed_records(
 
     Example:
         >>> released_count = detect_and_release_fixed_records(
-        ...     spark, "chlor", "dp_ingestion_one_flow",
+        ...     spark, "your_catalog", "your_schema",
         ...     "quarantine_table", "bronze_table",
         ...     ["id", "name", "age"]
         ... )
@@ -202,7 +202,7 @@ def move_expired_to_dead_letter(
 
     Example:
         >>> expired_count = move_expired_to_dead_letter(
-        ...     spark, "chlor", "dp_ingestion_one_flow",
+        ...     spark, "your_catalog", "your_schema",
         ...     "quarantine_table", "dead_letter_table"
         ... )
         >>> print(f"Moved {expired_count} expired records")
@@ -376,7 +376,7 @@ def get_quarantine_health_stats(
         dict: Dictionary with status counts and health metrics
 
     Example:
-        >>> stats = get_quarantine_health_stats(spark, "chlor", "dp_ingestion_one_flow", "quarantine_table")
+        >>> stats = get_quarantine_health_stats(spark, "your_catalog", "your_schema", "quarantine_table")
         >>> print(f"Active: {stats['active']}, Fixed: {stats['fixed']}, Expired: {stats['expired']}")
     """
     full_table_name = f"{catalog}.{schema}.{quarantine_table}"
